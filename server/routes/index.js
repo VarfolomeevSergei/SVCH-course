@@ -1,17 +1,13 @@
-const Router = require('express');
+const Router = require('express').Router;
 const router = new Router();
 
-
-const departmentRouter = require('./departmentRouter');
-const doctorRouter = require('./doctorRouter');
-const serviceRouter = require("./serviceRouter");
-const usersRouter = require("./usersRouter");
-
-
-router.use('/users', usersRouter);
-router.use('/service', serviceRouter);
-router.use('/doctor', doctorRouter);
-router.use('/department', departmentRouter);
-
+router.use('/admins', require('./adminRouter'));
+router.use('/appointments', require('./appointmentRouter'));
+router.use('/departments', require('./departmentRouter'));
+router.use('/diagnoses', require('./diagnosisRouter'));
+router.use('/doctors', require('./doctorRouter'));
+router.use('/doctor-schedules', require('./doctorScheduleRouter'));
+router.use('/patients', require('./patientRouter'));
+router.use('/services', require('./serviceRouter'));
 
 module.exports = router;
