@@ -93,7 +93,7 @@ function DoctorDetails() {
   }, []);
 
   
-  const doctorSchedules = schedules.filter((sch) => sch.doctorId === Number(id));
+  const doctorSchedules = schedules.filter((sch) => sch.doctorId._id === id);
 
   
   const uniqueDays = Array.from(new Set(doctorSchedules.map((s) => s.dayOfWeek)));
@@ -176,7 +176,7 @@ function DoctorDetails() {
     }
 
     try {
-      const dateObject = getNextDateByDayOfWeek(Number(selectedDayOfWeek));
+      const dateObject = getNextDateByDayOfWeek(selectedDayOfWeek);
       const [hours, minutes, seconds] = selectedTime.split(':');
       dateObject.setHours(Number(hours), Number(minutes), Number(seconds || 0), 0);
       const fullDateISO = dateObject.toISOString();
@@ -184,9 +184,9 @@ function DoctorDetails() {
       
       const payload = {
         date: fullDateISO, 
-        doctorId: Number(id),
-        patientId: Number(patientId),
-        serviceId: Number(selectedServiceId),
+        doctorId: id,
+        patientId: patientId,
+        serviceId: selectedServiceId,
       };
 
       await axios.post('/appointments/create', payload);
@@ -287,7 +287,7 @@ function DoctorDetails() {
             {doctorSchedules.map((sch) => {
               const dayName = dayNames[sch.dayOfWeek] || sch.dayOfWeek;
               return (
-                <tr key={sch.id}>
+                <tr key={sch._id}>
                   <td>{dayName}</td>
                   <td>{sch.startTime}</td>
                   <td>{sch.endTime}</td>
@@ -311,7 +311,7 @@ function DoctorDetails() {
       ) : (
         <ul>
           {services.map((srv) => (
-            <li key={srv.id}>
+            <li key={srv._id}>
               {srv.name} (Цена: {srv.price} руб.)
             </li>
           ))}
@@ -369,7 +369,7 @@ function DoctorDetails() {
           >
             <option value="">-- Выберите услугу --</option>
             {services.map((srv) => (
-              <option key={srv.id} value={srv.id}>
+              <option key={srv._id} value={srv._id}>
                 {srv.name} — {srv.price} руб.
               </option>
             ))}

@@ -139,7 +139,7 @@ function AdminDashboard() {
                         className="me-2"
                         onClick={() => {
                             const data = doctors.map((doc) => ({
-                                ID: doc.id,
+                                ID: doc._id,
                                 Login: doc.login,
                                 'First Name': doc.firstName,
                                 'Last Name': doc.lastName,
@@ -157,7 +157,7 @@ function AdminDashboard() {
                         variant="primary"
                         onClick={() => {
                             const data = doctors.map((doc) => ({
-                                ID: doc.id,
+                                ID: doc._id,
                                 Login: doc.login,
                                 'First Name': doc.firstName,
                                 'Last Name': doc.lastName,
@@ -201,8 +201,8 @@ function AdminDashboard() {
                             </tr>
                         ) : (
                             doctors.map((doc) => (
-                                <tr key={doc.id}>
-                                    <td>{doc.id}</td>
+                                <tr key={doc._id}>
+                                    <td>{doc._id}</td>
                                     <td>{doc.login}</td>
                                     <td>{doc.firstName}</td>
                                     <td>{doc.lastName}</td>
@@ -228,7 +228,7 @@ function AdminDashboard() {
                         className="me-2"
                         onClick={() => {
                             const data = patients.map((pat) => ({
-                                ID: pat.id,
+                                ID: pat._id,
                                 Login: pat.login,
                                 'First Name': pat.firstName,
                                 'Last Name': pat.lastName,
@@ -247,7 +247,7 @@ function AdminDashboard() {
                         variant="primary"
                         onClick={() => {
                             const data = patients.map((pat) => ({
-                                ID: pat.id,
+                                ID: pat._id,
                                 Login: pat.login,
                                 'First Name': pat.firstName,
                                 'Last Name': pat.lastName,
@@ -293,8 +293,8 @@ function AdminDashboard() {
                             </tr>
                         ) : (
                             patients.map((pat) => (
-                                <tr key={pat.id}>
-                                    <td>{pat.id}</td>
+                                <tr key={pat._id}>
+                                    <td>{pat._id}</td>
                                     <td>{pat.login}</td>
                                     <td>{pat.firstName}</td>
                                     <td>{pat.lastName}</td>

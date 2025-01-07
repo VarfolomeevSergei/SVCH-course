@@ -308,7 +308,7 @@ function AdminAppointments() {
         params: {
           doctorId,
           date: fullDateISO,
-          excludeId: currentAppointment.id,
+          excludeId: currentAppointment._id,
         }
       });
 
@@ -320,7 +320,7 @@ function AdminAppointments() {
       }
 
       
-      const res = await axios.put(`/appointments/${currentAppointment.id}`, {
+      const res = await axios.put(`/appointments/${currentAppointment._id}`, {
         date: fullDateISO,
         doctorId: parseInt(doctorId, 10),
         patientId: parseInt(patientId, 10),
@@ -328,7 +328,7 @@ function AdminAppointments() {
       });
 
       setAppointments(prev =>
-        prev.map(a => (a.id === currentAppointment.id ? res.data : a))
+        prev.map(a => (a._id === currentAppointment._id ? res.data : a))
       );
       setEditSuccess('Запись успешно обновлена!');
       handleCloseModal();
@@ -354,7 +354,7 @@ function AdminAppointments() {
 
     try {
       await axios.delete(`/appointments/${id}`);
-      setAppointments(prev => prev.filter(a => a.id !== id));
+      setAppointments(prev => prev.filter(a => a._id !== id));
     } catch (err) {
       console.error('Ошибка при удалении приёма:', err);
       setError('Не удалось удалить приём.');
@@ -449,22 +449,22 @@ function AdminAppointments() {
             </thead>
             <tbody>
               {appointments.map(appt => (
-                <tr key={appt.id}>
-                  <td>{appt.id}</td>
+                <tr key={appt._id}>
+                  <td>{appt._id}</td>
                   <td>{new Date(appt.date).toLocaleString()}</td>
                   <td>
                     {appt.Doctor
-                      ? `${appt.Doctor.firstName} ${appt.Doctor.lastName} (${appt.Doctor.specialization})`
+                      ? `${appt.doctorId.firstName} ${appt.doctorId.lastName} (${appt.doctorId.specialization})`
                       : '—'}
                   </td>
                   <td>
                     {appt.Patient
-                      ? `${appt.Patient.firstName} ${appt.Patient.lastName} (тел: ${appt.Patient.phoneNumber})`
+                      ? `${appt.patientId.firstName} ${appt.patientId.lastName} (тел: ${appt.patientId.phoneNumber})`
                       : '—'}
                   </td>
                   <td>
                     {appt.Service
-                      ? `${appt.Service.name} (${appt.Service.price} руб.)`
+                      ? `${appt.serviceId.name} (${appt.serviceId.price} руб.)`
                       : '—'}
                   </td>
                   <td>
@@ -479,7 +479,7 @@ function AdminAppointments() {
                     <Button
                       variant="danger"
                       size="sm"
-                      onClick={() => handleDeleteAppointment(appt.id)}
+                      onClick={() => handleDeleteAppointment(appt._id)}
                     >
                       Удалить
                     </Button>
@@ -522,7 +522,7 @@ function AdminAppointments() {
               >
                 <option value="">-- Выберите врача --</option>
                 {doctors.map(doc => (
-                  <option key={doc.id} value={doc.id}>
+                  <option key={doc._id} value={doc._id}>
                     {doc.firstName} {doc.lastName} ({doc.specialization})
                   </option>
                 ))}
@@ -535,7 +535,7 @@ function AdminAppointments() {
                 <strong>Расписание врача:</strong>
                 <ul className="mb-0">
                   {selectedDoctorSchedules.map(sch => (
-                    <li key={sch.id}>
+                    <li key={sch._id}>
                       {dayNames[sch.dayOfWeek]}: {sch.startTime.slice(0,5)} - {sch.endTime.slice(0,5)}
                     </li>
                   ))}
@@ -605,8 +605,8 @@ function AdminAppointments() {
               >
                 <option value="">-- Выберите пациента --</option>
                 {patients.map(p => (
-                  <option key={p.id} value={p.id}>
-                    {p.firstName} {p.lastName} (ID: {p.id})
+                  <option key={p._id} value={p._id}>
+                    {p.firstName} {p.lastName} (ID: {p._id})
                   </option>
                 ))}
               </Form.Select>
@@ -623,7 +623,7 @@ function AdminAppointments() {
               >
                 <option value="">-- Выберите услугу --</option>
                 {services.map(srv => (
-                  <option key={srv.id} value={srv.id}>
+                  <option key={srv._id} value={srv._id}>
                     {srv.name} (Цена: {srv.price} руб.)
                   </option>
                 ))}
@@ -668,7 +668,7 @@ function AdminAppointments() {
               >
                 <option value="">-- Выберите врача --</option>
                 {doctors.map(doc => (
-                  <option key={doc.id} value={doc.id}>
+                  <option key={doc._id} value={doc._id}>
                     {doc.firstName} {doc.lastName} ({doc.specialization})
                   </option>
                 ))}
@@ -681,7 +681,7 @@ function AdminAppointments() {
                 <strong>Расписание врача:</strong>
                 <ul className="mb-0">
                   {selectedDoctorSchedules.map(sch => (
-                    <li key={sch.id}>
+                    <li key={sch._id}>
                       {dayNames[sch.dayOfWeek]}: {sch.startTime.slice(0,5)} - {sch.endTime.slice(0,5)}
                     </li>
                   ))}
@@ -751,8 +751,8 @@ function AdminAppointments() {
               >
                 <option value="">-- Выберите пациента --</option>
                 {patients.map(p => (
-                  <option key={p.id} value={p.id}>
-                    {p.firstName} {p.lastName} (ID: {p.id})
+                  <option key={p._id} value={p._id}>
+                    {p.firstName} {p.lastName} (ID: {p._id})
                   </option>
                 ))}
               </Form.Select>
@@ -769,7 +769,7 @@ function AdminAppointments() {
               >
                 <option value="">-- Выберите услугу --</option>
                 {services.map(srv => (
-                  <option key={srv.id} value={srv.id}>
+                  <option key={srv._id} value={srv._id}>
                     {srv.name} (Цена: {srv.price} руб.)
                   </option>
                 ))}

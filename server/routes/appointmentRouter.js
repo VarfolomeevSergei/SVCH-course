@@ -11,12 +11,12 @@ router.post(
     [
         body('date').notEmpty().withMessage('Дата обязательна')
             .isISO8601().withMessage('Некорректный формат даты'),
-        body('doctorId').notEmpty().withMessage('ID врача обязателен')
-            .isInt().withMessage('ID врача должен быть числом'),
-        body('patientId').notEmpty().withMessage('ID пациента обязателен')
-            .isInt().withMessage('ID пациента должен быть числом'),
+        body('doctorId').notEmpty().withMessage('ID врача обязателен'),
+            // .isInt().withMessage('ID врача должен быть числом'),
+        body('patientId').notEmpty().withMessage('ID пациента обязателен'),
+            // .isInt().withMessage('ID пациента должен быть числом'),
         body('serviceId').notEmpty().withMessage('ID услуги обязателен')
-            .isInt().withMessage('ID услуги должен быть числом'),
+            // .isInt().withMessage('ID услуги должен быть числом'),
     ],
     AppointmentController.create
 );

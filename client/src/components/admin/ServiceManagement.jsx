@@ -171,13 +171,17 @@ function ServiceManagement() {
 
     
     const handleOpenEditDialog = (service) => {
-        setEditServiceId(service.id);
-        setEditServiceName(service.name);
-        setEditServicePrice(service.price);
-        setEditServiceDepartment(service.Department.id);
-        setEditServicePhoto(null);
-        setEditServicePhotoPreview(service.photo ? `${axios.defaults.baseURL}${service.photo}` : null);
-        setOpenEditDialog(true);
+        if(service)
+        {
+            setEditServiceId(service._id);
+            setEditServiceName(service.name);
+            setEditServicePrice(service.price);
+            setEditServiceDepartment(service.DepartmentId);
+            setEditServicePhoto(null);
+            setEditServicePhotoPreview(service.photo ? `${axios.defaults.baseURL}${service.photo}` : null);
+            setOpenEditDialog(true);
+        }
+       
     };
 
     
@@ -318,13 +322,13 @@ function ServiceManagement() {
                         <InputLabel id="department-select-label">Отделение</InputLabel>
                         <Select
                             labelId="department-select-label"
-                            value={newServiceDepartment}
+                            value={newServiceDepartment ?? ''} 
                             onChange={(e) => setNewServiceDepartment(e.target.value)}
                             label="Отделение"
                             required
                         >
                             {departments.map((dept) => (
-                                <MenuItem key={dept.id} value={dept.id}>
+                                <MenuItem key={dept._id} value={dept._id}>
                                     {dept.name}
                                 </MenuItem>
                             ))}
@@ -379,70 +383,69 @@ function ServiceManagement() {
                 </div>
             ) : (
                 <TableContainer component={Paper}>
-                    <Table aria-label="services table">
-                        <TableHead>
-                            <TableRow>
-                                <TableCell>ID</TableCell>
-                                <TableCell>Название Услуги</TableCell>
-                                <TableCell>Цена</TableCell>
-                                <TableCell>Отделение</TableCell>
-                                <TableCell>Фото</TableCell>
-                                <TableCell align="right">Действия</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {services.length > 0 ? (
-                                services.map((service) => (
-                                    <TableRow key={service.id}>
-                                        <TableCell>{service.id}</TableCell>
-                                        <TableCell>{service.name}</TableCell>
-                                        <TableCell>{service.price.toFixed(2)} ₽</TableCell>
-                                        <TableCell>{service.Department.name}</TableCell>
-                                        <TableCell>
-                                            {service.photo ? (
-                                                <Box
-                                                    component="img"
-                                                    src={`${axios.defaults.baseURL}${service.photo}`}
-                                                    alt={service.name}
-                                                    sx={{
-                                                        width: 100,
-                                                        height: 100,
-                                                        objectFit: 'cover',
-                                                        borderRadius: '8px',
-                                                    }}
-                                                />
-                                            ) : (
-                                                'Нет Фото'
-                                            )}
-                                        </TableCell>
-                                        <TableCell align="right">
-                                            <IconButton
-                                                color="primary"
-                                                onClick={() => handleOpenEditDialog(service)}
-                                            >
-                                                <EditIcon />
-                                            </IconButton>
-                                            <IconButton
-                                                color="error"
-                                                onClick={() => handleOpenDeleteDialog(service.id)}
-                                            >
-                                                <DeleteIcon />
-                                            </IconButton>
-                                        </TableCell>
-                                    </TableRow>
-                                ))
-                            ) : (
-                                <TableRow>
-                                    <TableCell colSpan={6} align="center">
-                                        Нет услуг для отображения.
-                                    </TableCell>
-                                </TableRow>
-                            )}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-            )}
-
+      <Table aria-label="services table">
+        <TableHead>
+          <TableRow>
+            <TableCell>ID</TableCell>
+            <TableCell>Название Услуги</TableCell>
+            <TableCell>Цена</TableCell>
+            <TableCell>Отделение</TableCell>
+            <TableCell>Фото</TableCell>
+            <TableCell align="right">Действия</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {services.length > 0 ? (
+            services.map((service) => (
+              <TableRow key={service._id}>
+                <TableCell>{service._id}</TableCell>
+                <TableCell>{service.name}</TableCell>
+                <TableCell>{service.price.toFixed(2)} ₽</TableCell>
+                <TableCell>{service.departmentId ? service.departmentId.name : 'Не указано'}</TableCell>
+                <TableCell>
+                  {service.photo ? (
+                    <Box
+                      component="img"
+                      src={`${axios.defaults.baseURL}${service.photo}`}
+                      alt={service.name}
+                      sx={{
+                        width: 100,
+                        height: 100,
+                        objectFit: 'cover',
+                        borderRadius: '8px',
+                      }}
+                    />
+                  ) : (
+                    'Нет Фото'
+                  )}
+                </TableCell>
+                <TableCell align="right">
+                  <IconButton
+                    color="primary"
+                    onClick={() => handleOpenEditDialog(service)}
+                  >
+                    <EditIcon />
+                  </IconButton>
+                  <IconButton
+                    color="error"
+                    onClick={() => handleOpenDeleteDialog(service._id)}
+                  >
+                    <DeleteIcon />
+                  </IconButton>
+                </TableCell>
+              </TableRow>
+            ))
+          ) : (
+            <TableRow>
+              <TableCell colSpan={6} align="center">
+                Нет услуг для отображения.
+              </TableCell>
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
+    </TableContainer>
+  )}
             {/* Диалог редактирования услуги */}
             <Dialog open={openEditDialog} onClose={handleCloseEditDialog}>
                 <DialogTitle>Редактировать Услугу</DialogTitle>
@@ -484,7 +487,7 @@ function ServiceManagement() {
                             required
                         >
                             {departments.map((dept) => (
-                                <MenuItem key={dept.id} value={dept.id}>
+                                <MenuItem key={dept._id} value={dept._id}>
                                     {dept.name}
                                 </MenuItem>
                             ))}

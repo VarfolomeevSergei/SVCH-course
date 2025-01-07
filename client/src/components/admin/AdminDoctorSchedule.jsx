@@ -132,9 +132,9 @@ const AdminDoctorSchedule = () => {
     setFormErrors([]);
 
     try {
-      const response = await axios.put(`/doctor-schedules/${currentSchedule.id}`, formData);
+      const response = await axios.put(`/doctor-schedules/${currentSchedule._id}`, formData);
       setSchedules((prev) =>
-        prev.map((schedule) => (schedule.id === currentSchedule.id ? response.data : schedule))
+        prev.map((schedule) => (schedule._id === currentSchedule._id ? response.data : schedule))
       );
       handleCloseModal();
     } catch (err) {
@@ -149,12 +149,12 @@ const AdminDoctorSchedule = () => {
     }
   };
 
-  const handleDeleteSchedule = async (id) => {
+  const handleDeleteSchedule = async (_id) => {
     if (!window.confirm('Вы уверены, что хотите удалить это расписание?')) return;
 
     try {
-      await axios.delete(`/doctor-schedules/${id}`);
-      setSchedules((prev) => prev.filter((schedule) => schedule.id !== id));
+      await axios.delete(`/doctor-schedules/${_id}`);
+      setSchedules((prev) => prev.filter((schedule) => schedule._id !== _id));
     } catch (err) {
       console.error('Ошибка при удалении расписания:', err);
       setError('Не удалось удалить расписание. Пожалуйста, попробуйте позже.');
@@ -172,14 +172,14 @@ const AdminDoctorSchedule = () => {
 
   
   const filteredSchedules = schedules
-    .filter((sch) => (filterDoctorId ? sch.doctorId === Number(filterDoctorId) : true))
-    .filter((sch) => (filterDayOfWeek ? sch.dayOfWeek === Number(filterDayOfWeek) : true));
+    .filter((sch) => (filterDoctorId ? sch.doctorId._id === filterDoctorId : true))
+    .filter((sch) => (filterDayOfWeek ? sch.dayOfWeek === filterDayOfWeek : true));
 
   
   const handleExportExcel = () => {
     try {
       const dataForExcel = filteredSchedules.map((sch) => ({
-        ID: sch.id,
+        ID: sch._id,
         Врач: sch.Doctor
           ? `${sch.Doctor.firstName} ${sch.Doctor.lastName} (${sch.Doctor.specialization})`
           : 'Неизвестно',
@@ -246,7 +246,7 @@ const AdminDoctorSchedule = () => {
 
         tableHTML += `
           <tr>
-            <td style="padding: 8px;">${sch.id}</td>
+            <td style="padding: 8px;">${sch._id}</td>
             <td style="padding: 8px;">${docName}</td>
             <td style="padding: 8px;">${dayName}</td>
             <td style="padding: 8px;">${sch.startTime}</td>
@@ -312,7 +312,7 @@ const AdminDoctorSchedule = () => {
                 <Form.Select value={filterDoctorId} onChange={handleFilterDoctor}>
                   <option value="">Все врачи</option>
                   {doctors.map((doc) => (
-                    <option key={doc.id} value={doc.id}>
+                    <option key={doc._id} value={doc._id}>
                       {doc.firstName} {doc.lastName} ({doc.specialization})
                     </option>
                   ))}
@@ -362,11 +362,11 @@ const AdminDoctorSchedule = () => {
             </thead>
             <tbody>
               {filteredSchedules.map((schedule) => (
-                <tr key={schedule.id}>
-                  <td>{schedule.id}</td>
+                <tr key={schedule._id}>
+                  <td>{schedule._id}</td>
                   <td>
-                    {schedule.Doctor
-                      ? `${schedule.Doctor.firstName} ${schedule.Doctor.lastName} (${schedule.Doctor.specialization})`
+                    {schedule.doctorId
+                      ? `${schedule.doctorId.firstName} ${schedule.doctorId.lastName} (${schedule.doctorId.specialization})`
                       : 'Неизвестно'}
                   </td>
                   <td>
@@ -396,7 +396,7 @@ const AdminDoctorSchedule = () => {
                     <Button
                       variant="danger"
                       size="sm"
-                      onClick={() => handleDeleteSchedule(schedule.id)}
+                      onClick={() => handleDeleteSchedule(schedule._id)}
                     >
                       Удалить
                     </Button>
@@ -432,7 +432,7 @@ const AdminDoctorSchedule = () => {
               >
                 <option value="">Выберите врача</option>
                 {doctors.map((doctor) => (
-                  <option key={doctor.id} value={doctor.id}>
+                  <option key={doctor._id} value={doctor._id}>
                     {doctor.firstName} {doctor.lastName} ({doctor.specialization})
                   </option>
                 ))}
@@ -517,7 +517,7 @@ const AdminDoctorSchedule = () => {
               >
                 <option value="">Выберите врача</option>
                 {doctors.map((doctor) => (
-                  <option key={doctor.id} value={doctor.id}>
+                  <option key={doctor._id} value={doctor._id}>
                     {doctor.firstName} {doctor.lastName} ({doctor.specialization})
                   </option>
                 ))}

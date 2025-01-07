@@ -103,7 +103,7 @@ function DepartmentManagement() {
 
     
     const handleOpenEditDialog = (dept) => {
-        setEditDeptId(dept.id);
+        setEditDeptId(dept._id);
         setEditDeptName(dept.name);
         setOpenEditDialog(true);
     };
@@ -227,8 +227,8 @@ function DepartmentManagement() {
                         <TableBody>
                             {departments.length > 0 ? (
                                 departments.map((dept) => (
-                                    <TableRow key={dept.id}>
-                                        <TableCell>{dept.id}</TableCell>
+                                    <TableRow key={dept._id}>
+                                        <TableCell>{dept._id}</TableCell>
                                         <TableCell>{dept.name}</TableCell>
                                         <TableCell align="right">
                                             <IconButton
@@ -239,7 +239,7 @@ function DepartmentManagement() {
                                             </IconButton>
                                             <IconButton
                                                 color="error"
-                                                onClick={() => handleOpenDeleteDialog(dept.id)}
+                                                onClick={() => handleOpenDeleteDialog(dept._id)}
                                             >
                                                 <DeleteIcon />
                                             </IconButton>

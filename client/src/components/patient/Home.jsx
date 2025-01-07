@@ -175,7 +175,7 @@ function Home() {
                                         <br />
     
                                     </Card.Text>
-                                    <Button variant="primary" href={`/doctors/${doctor.id}`} className="mt-auto">
+                                    <Button variant="primary" href={`/doctors/${doctor._id}`} className="mt-auto">
                                         Подробнее
                                     </Button>
                                 </Card.Body>

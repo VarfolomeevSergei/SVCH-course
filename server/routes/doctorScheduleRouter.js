@@ -2,6 +2,7 @@ const express = require('express');
 const DoctorScheduleController = require('../controllers/DoctorScheduleController');
 const { body } = require('express-validator');
 const authenticateToken = require('../middleware/authenticateToken');
+const mongoose = require('mongoose');
 
 const router = express.Router();
 
@@ -9,7 +10,8 @@ router.post(
     '/create',
     authenticateToken,
     [
-        body('doctorId').notEmpty().withMessage('ID врача обязательно').isInt().withMessage('ID врача должен быть числом'),
+        body('doctorId').notEmpty().withMessage('ID врача обязательно'), 
+            // .isInt().withMessage('ID врача должен быть числом'),
         body('dayOfWeek')
             .notEmpty()
             .withMessage('День недели обязателен')
@@ -29,7 +31,8 @@ router.put(
     '/:id',
     authenticateToken,
     [
-        body('doctorId').optional().isInt().withMessage('ID врача должен быть числом'),
+        body('doctorId').optional(),
+        // .isInt().withMessage('ID врача должен быть числом'),
         body('dayOfWeek')
             .optional()
             .isInt({ min: 0, max: 6 })

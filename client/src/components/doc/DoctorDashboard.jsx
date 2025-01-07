@@ -115,7 +115,7 @@ function DoctorDashboard() {
     // Получение записей и диагнозов после загрузки доктора
     useEffect(() => {
         if (doctor) {
-            fetchAppointments(doctor.id);
+            fetchAppointments(doctor._id);
             fetchDiagnoses();
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -149,7 +149,7 @@ function DoctorDashboard() {
 
     // Фильтрация расписаний для текущего доктора
     const mySchedules = doctor
-        ? allSchedules.filter((s) => s.doctorId === doctor.id)
+        ? allSchedules.filter((s) => s.doctorId === doctor._id)
         : [];
 
     // Обработка изменений формы
@@ -198,7 +198,7 @@ function DoctorDashboard() {
                 putData.append('photo', formData.photo);
             }
 
-            const res = await axios.put(`/doctors/${doctor.id}`, putData, {
+            const res = await axios.put(`/doctors/${doctor._id}`, putData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
@@ -257,7 +257,7 @@ function DoctorDashboard() {
             });
 
             setDiagnosisSuccess('Диагноз успешно добавлен.');
-            fetchAppointments(doctor.id);
+            fetchAppointments(doctor._id);
             fetchDiagnoses();
 
             setTimeout(() => {
@@ -348,7 +348,7 @@ function DoctorDashboard() {
     // Обработчики экспорта для расписаний
     const handleExportSchedulesExcel = () => {
         const data = mySchedules.map((s) => ({
-            ID: s.id,
+            ID: s._id,
             'Day of Week': [
                 'Sunday',
                 'Monday',
@@ -367,7 +367,7 @@ function DoctorDashboard() {
 
     const handleExportSchedulesWord = () => {
         const data = mySchedules.map((s) => ({
-            ID: s.id,
+            ID: s._id,
             'Day of Week': [
                 'Sunday',
                 'Monday',
@@ -387,7 +387,7 @@ function DoctorDashboard() {
     // Обработчики экспорта для записей
     const handleExportAppointmentsExcel = () => {
         const data = appointments.map((a) => ({
-            ID: a.id,
+            ID: a._id,
             'Date/Time': format(new Date(a.date), 'dd.MM.yyyy HH:mm'),
             Patient: `${a.Patient.firstName} ${a.Patient.lastName}`,
             Service: a.Service.name,
@@ -398,7 +398,7 @@ function DoctorDashboard() {
 
     const handleExportAppointmentsWord = () => {
         const data = appointments.map((a) => ({
-            ID: a.id,
+            ID: a._id,
             'Date/Time': format(new Date(a.date), 'dd.MM.yyyy HH:mm'),
             Patient: `${a.Patient.firstName} ${a.Patient.lastName}`,
             Service: a.Service.name,
@@ -410,7 +410,7 @@ function DoctorDashboard() {
     // Обработчики экспорта для диагнозов
     const handleExportDiagnosesExcel = () => {
         const data = diagnoses.map((d) => ({
-            ID: d.id,
+            ID: d._id,
             Patient: `${d.Patient.firstName} ${d.Patient.lastName}`,
             'Diagnosis Name': d.name,
             Conclusion: d.conclusion,
@@ -422,7 +422,7 @@ function DoctorDashboard() {
 
     const handleExportDiagnosesWord = () => {
         const data = diagnoses.map((d) => ({
-            ID: d.id,
+            ID: d._id,
             Patient: `${d.Patient.firstName} ${d.Patient.lastName}`,
             'Diagnosis Name': d.name,
             Conclusion: d.conclusion,
@@ -456,12 +456,12 @@ function DoctorDashboard() {
         setEditLoading(true);
 
         try {
-            const res = await axios.put(`/diagnoses/${diagnosisToEdit.id}`, editDiagnosisData);
+            const res = await axios.put(`/diagnoses/${diagnosisToEdit._id}`, editDiagnosisData);
             setEditDiagnosisSuccess('Диагноз успешно обновлен.');
             // Обновляем диагнозы в состоянии
             setDiagnoses((prevDiagnoses) =>
                 prevDiagnoses.map((diag) =>
-                    diag.id === diagnosisToEdit.id ? res.data : diag
+                    diag._id === diagnosisToEdit._id ? res.data : diag
                 )
             );
             setShowEditDiagnosisModal(false);
@@ -500,10 +500,10 @@ function DoctorDashboard() {
         setDeleteDiagnosisError('');
 
         try {
-            await axios.delete(`/diagnoses/${diagnosisToDelete.id}`);
+            await axios.delete(`/diagnoses/${diagnosisToDelete._id}`);
             // Удаляем диагноз из состояния
             setDiagnoses((prevDiagnoses) =>
-                prevDiagnoses.filter((diag) => diag.id !== diagnosisToDelete.id)
+                prevDiagnoses.filter((diag) => diag._id !== diagnosisToDelete._id)
             );
             setUpdateSuccess('Диагноз успешно удален.');
             setShowDeleteDiagnosisModal(false);
@@ -687,8 +687,8 @@ function DoctorDashboard() {
                                 const dayName = days[item.dayOfWeek] || item.dayOfWeek;
 
                                 return (
-                                    <tr key={item.id}>
-                                        <td>{item.id}</td>
+                                    <tr key={item._id}>
+                                        <td>{item._id}</td>
                                         <td>{dayName}</td>
                                         <td>{item.startTime}</td>
                                         <td>{item.endTime}</td>
@@ -745,8 +745,8 @@ function DoctorDashboard() {
                             </tr>
                         ) : (
                             appointments.map((appt) => (
-                                <tr key={appt.id}>
-                                    <td>{appt.id}</td>
+                                <tr key={appt._id}>
+                                    <td>{appt._id}</td>
                                     <td>
                                         {format(new Date(appt.date), 'dd.MM.yyyy HH:mm')}
                                     </td>
@@ -816,8 +816,8 @@ function DoctorDashboard() {
                             </tr>
                         ) : (
                             diagnoses.map((diag) => (
-                                <tr key={diag.id}>
-                                    <td>{diag.id}</td>
+                                <tr key={diag._id}>
+                                    <td>{diag._id}</td>
                                     <td>{`${diag.Patient.firstName} ${diag.Patient.lastName}`}</td>
                                     <td>{diag.name}</td>
                                     <td>{diag.conclusion}</td>
@@ -950,7 +950,7 @@ function DoctorDashboard() {
                     {diagnosisToDelete && (
                         <p>
                             Are you sure you want to delete the diagnosis with ID{' '}
-                            <strong>{diagnosisToDelete.id}</strong>?
+                            <strong>{diagnosisToDelete._id}</strong>?
                         </p>
                     )}
                 </Modal.Body>
